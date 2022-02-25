@@ -25,7 +25,7 @@ module.exports = function routes(app) {
         let newUser = new users({username : name})
         newUser.save((err, data) => {
             if(err) throw err
-            res.json(data)
+            res.render("list", {data : data})
         })
         
             
