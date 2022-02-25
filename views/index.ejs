@@ -10,10 +10,31 @@
     <h1>THis is the homepage</h1>
 
     <div>
-        <form action="/add" method=""POST>
+        <form action="/add" method="POST">
             <input type="text" name="name">
-            <button type="submit">Create new user</button>
+            <button type="submit" >Create new user</button>
         </form>
     </div>
+
+
+
+
+
+    <script>
+        const form = document.querySelector("form")
+        const input = document.querySelector("input").value
+
+        form.onsubmit = (x) => {
+            x.preventDefault()
+        }
+
+        const xml = new XMLHttpRequest()
+        xml.open("POST", "./add", true)
+
+        const form = new FormData(form)
+        xml.send(form)
+        
+
+    </script>
 </body>
 </html>
