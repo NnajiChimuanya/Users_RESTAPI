@@ -16,11 +16,14 @@ module.exports = function routes(app) {
         username : {
             type : String,
             required : true
-        }
+        },
+        bio : String
     })
 
     const users = mongoose.model("users", userSchema)
 
+
+    //creating new user
     app.post("/add", urlencodedParser, (req, res) => {
         let name = req.body.name
 
@@ -31,6 +34,22 @@ module.exports = function routes(app) {
         })
     })
 
+
+    //getting a user's info using id
+    app.get("/getUser/:id", (req, res) => {
+        let id = req.params.id
+
+        users.findById({_id : id}, (err, data) => {
+            if(err) throw err
+
+            res.json(data)
+        })
+            
+      
+    })
+
+
+    //getting the list of users in a database
     app.get("/getUsers", (req, res) => {
         users.find({}, (err, data) => {
             if(err) throw err
@@ -38,12 +57,25 @@ module.exports = function routes(app) {
         })
     })
 
-    app.delete("/delete/:id", (req, res) => {
+
+    //deleting a user based on id input
+    app.get("/delete/:id", (req, res) => {
         let id = req.params.id
         
-        users.findByIdAndDelete({_id : id}, {new : true}, (err, data) => {
+        users.findByIdAndDelete({_id : id}, (err, data) => {
             if(err) res.json("Error")
-            res.json(`deleted user : ${id} successfully`)
+            res.json(`deleted user : ${data._id} successfully`)
+        })
+    })
+
+
+    //updating a user bio based on the id input
+    app.post("/updateUser", urlencodedParser, (req, res) => {
+        const {userid, update} = req.body
+
+        users.findByIdAndUpdate({_id : userid}, {bio : update}, {upsert : true}, (err, data) => {
+            if(err) throw err
+            res.json(`updated user by id : ${userid}`)
         })
     })
         
